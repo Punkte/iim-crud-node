@@ -1,0 +1,15 @@
+import mongoose from 'mongoose'
+
+export const connectDb = () => {
+  console.log(`mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@mongodb:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}?authSource=admin`)
+  mongoose
+    .connect(
+      `mongodb://${process.env.MONGO_ROOT_USERNAME}:${process.env.MONGO_ROOT_PASSWORD}@mongodb:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}?authSource=admin`,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+    )
+    .then(() => console.log('MongoDB Connected'))
+    .catch((err) => console.log(err))
+}
