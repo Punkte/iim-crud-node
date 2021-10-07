@@ -1,25 +1,28 @@
-import Cookies from 'js-cookie'
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import Api from '../services/api'
 import { AuthContext } from '../store/AuthStore'
 
 const Login = () => {
   const username = useRef()
   const password = useRef()
-  const { toggleLogged } = useContext(AuthContext)
+  const { login } = useContext(AuthContext)
+
+  useEffect(() => {
+    username.current.value = 'johndoe'
+    password.current.value = 'bonsoir'
+  }, [])
 
   const onSubmit = async (e) => {
     e.preventDefault()
     const { token } = await Api.login({ username: username.current.value, password: password.current.value })
     console.log(token)
     if (token) {
-      Cookies.set('token', token)
-      toggleLogged()
+      login(token)
     }
   }
 
   return (
-    <section  className="hero is-primary is-fullheight">
+    <section className="hero is-primary is-fullheight">
     <div className="hero-body">
       <div className="container">
         <div className="columns is-centered">
@@ -28,7 +31,7 @@ const Login = () => {
               <div className="field">
                 <label htmlFor="username" className="label">Username</label>
                 <div className="control has-icons-left">
-                  <input ref={username} className="input" name="username" value="johndoe" readOnly/>
+                  <input ref={username} className="input" name="username"/>
                   <span className="icon is-small is-left">
                     <i className="fa fa-envelope"></i>
                   </span>
@@ -37,14 +40,14 @@ const Login = () => {
               <div className="field">
                 <label htmlFor="password" className="label">Password</label>
                 <div className="control has-icons-left">
-                  <input name="password" ref={password} type="password" placeholder="*******" className="input" required value="bonsoir" readOnly />
+                  <input name="password" ref={password} type="password" placeholder="*******" className="input" required />
                   <span className="icon is-small is-left">
                     <i className="fa fa-lock"></i>
                   </span>
                 </div>
               </div>
               <div className="field">
-                <label for="" className="checkbox">
+                <label htmlFor="" className="checkbox">
                   <input type="checkbox" />
                  Remember me
                 </label>

@@ -1,4 +1,6 @@
 import { Router } from 'express'
+import { io } from '../index.js'
+import verify from '../middlewares/verify.js'
 import Article from '../models/Article.js'
 
 const router = Router()
@@ -11,7 +13,7 @@ router.get('/:id', async (req, res) => {
 
 // get a list of latest 10 articles
 router.get('/', async (req, res) => {
-  const articles = await Article.find().sort({ createdAt: -1 }).limit(10)
+  const articles = await Article.find().sort({ createdAt: -1 })
   return res.json(articles)
 })
 
@@ -23,10 +25,11 @@ router.get('/page/:page', async (req, res) => {
 })
 
 // create an article
-router.post('/', async (req, res) => {
+router.post('/', verify,  async (req, res) => {
   try {
     const article = new Article(req.body)
     await article.save()
+    io.emit('article', article)
     return res.status(201).json(article)
   } catch(e) {
     return res.status(500).json(e)
@@ -34,13 +37,13 @@ router.post('/', async (req, res) => {
 })
 
 // update an article
-router.put('/:id', async (req, res) => {
+router.put('/:id', verify, async (req, res) => {
   const article = await Article.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
   return res.json(article)
 })
 
 // delete an article
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verify, async (req, res) => {
   const article = await Article.findOneAndDelete({ _id: req.params.id })
   return res.json(article)
 })

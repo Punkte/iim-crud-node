@@ -11,11 +11,15 @@ router.get('/', async function(req, res) {
 
 // get user info
 router.get('/profile', async function(req, res) {
-  const { authorization } = req.headers
-  const bearerToken = authorization.split(' ')[1]
-  
-  console.log(jwt.decode(bearerToken))
-  return res.json({ bonsoir: "lol" })
+  try {
+    const { authorization } = req.headers
+    const bearerToken = authorization.split(' ')[1]
+    const { id } = jwt.decode(bearerToken)
+    const user = await User.findById(id)
+    return res.json(user)
+  } catch(e) {
+    return res.status(401).json({ error: 'unauthorized' })
+  }
 })
 
 

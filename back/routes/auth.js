@@ -8,7 +8,6 @@ const router = express.Router()
 
 // @route   POST api/auth/login
 router.post('/login', async (req, res) => {
-  console.log(req.body)
   const { username, password } = req.body
   if (!username || !password) {
     return res
