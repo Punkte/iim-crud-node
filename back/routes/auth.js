@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
 // @route   POST api/auth/register
 router.post('/register', async (req, res) => {
   const { username, password, email } = req.body
-  if (username && password) {
+  if (username && password && email) {
     const passwordHash = await bcrypt.hash(password, 10)
     const exists = await User.exists({ username })
     if (false === exists) {
