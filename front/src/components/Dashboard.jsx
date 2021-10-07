@@ -10,14 +10,14 @@ const Dashboard = () => {
     (async () => {
       const response = await Api.getProfile()
       setData(response)
+      Lottie.loadAnimation({
+        container: animationRef.current, 
+        renderer: 'canvas',
+        loop: true,
+        autoplay: true,
+        animationData,
+      });
     })()
-    Lottie.loadAnimation({
-      container: animationRef.current, 
-      renderer: 'canvas',
-      loop: true,
-      autoplay: true,
-      animationData,
-    });
   }, [])
   return (
     <div className="container my-5">
